@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, ImageBackground} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 let Map = () => {
   let MapRef = null;
-  let [logtitude, setLongtitude] = useState(null);
+  let [longtitude, setLongtitude] = useState(null);
   let [latitude, setLatitude] = useState(null);
   let [error, setError] = useState(null);
 
@@ -12,20 +13,18 @@ let Map = () => {
   }, []);
 
   let geoLocation = () => {
-    navigator.geolocation.getCurrentPosition(
+    Geolocation.getCurrentPosition(
       (position) => {
-        console.log('wokeeey');
-        console.log(position);
-        setLongtitude(position.coords.latitude);
-        setLatitude(position.coords.longitude);
+        setLongtitude(position.coords.longitude);
+        setLatitude(position.coords.latitude);
       },
       (error) => setError({error: error.message}),
       {enableHighAccuracy: false, timeout: 200000, maximumAge: 1000},
     );
   };
   const initialRegion = {
-    latitude: -6.173292,
-    longitude: 106.841036,
+    latitude: latitude,
+    longitude: longtitude,
     latitudeDelta: 0.25,
     longitudeDelta: 0.15,
   };
@@ -57,9 +56,7 @@ let Map = () => {
           style={styles.map}
           initialRegion={initialRegion}>
           <Marker
-            coordinate={{latitude: -6.173292, longitude: 106.841036}}></Marker>
-          <Marker
-            coordinate={{latitude: 36.778259, longitude: -119.417931}}></Marker>
+            coordinate={{latitude: latitude, longitude: longtitude}}></Marker>
         </MapView>
       </View>
     </View>
